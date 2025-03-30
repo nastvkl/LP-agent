@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+  <title>LivePerson SDK client example</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <script src="https://lpcdn.lpsnmedia.net/webagent/client-SDK.min.js"></script>
+  <script>
+    const fetchCustomerDetails = () => {
+      console.log("** Started initiating the SDK");
+      if (!window.lpTag || !window.lpTag.agentSDK) {
+        console.error('** SDK not loaded');
+        return;
+      }
+
+      const SDK = window.lpTag.agentSDK;
+
+      const initStartTime = performance.now();
+      console.log('** SDK initialization started');
+
+      SDK.init();
+
+      const initEndTime = performance.now();
+      const initDuration = ((initEndTime - initStartTime) / 1000).toFixed(3);
+      console.log(`** SDK initialization completed in ${initDuration} seconds`);
+
+      const customerDetailsPath = 'authenticatedData.customerDetails';
+
+      const getStartTime = performance.now();
+
+      console.log('** Started getting customer details from SDK');
+      SDK.get(customerDetailsPath, (data) => {
+
+        const getEndTime = performance.now();
+        const getDuration = ((getEndTime - getStartTime) / 1000).toFixed(3);
+        console.log(`** SDKk get request completed in ${getDuration} seconds`);
+         console.log('** Customer details loaded:', data);
+
+        if (data) {
+          const { customerId: id, userName: name } = data;
+          setCustomerId(id);
+          setUserName(name);
+          setStatus(null);
+          console.log('** Customer details loaded:', data);
+        } else {
+          console.log('** No customer details found');
+          setStatus('error');
+        }
+      }, (error) => {
+        const getEndTime = performance.now();
+        const getDuration = ((getEndTime - getStartTime) / 1000).toFixed(3);
+        console.log(`** SDK get request failed after ${getDuration} seconds`);
+
+        console.error('** Error fetching customer details:', error);
+        setStatus('error');
+      });
+    };
+    window.addEventListener('DOMContentLoaded', fetchCustomerDetails);
+  </script>
+</head>
+<body>
+  <h1>it's alive</h1>
+</body>
+</html>
