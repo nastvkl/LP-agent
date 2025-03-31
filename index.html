@@ -37,13 +37,9 @@
 
         if (data) {
           const { customerId: id, userName: name } = data;
-          setCustomerId(id);
-          setUserName(name);
-          setStatus(null);
           console.log('** Customer details loaded:', data);
         } else {
           console.log('** No customer details found');
-          setStatus('error');
         }
       }, (error) => {
         const getEndTime = performance.now();
@@ -51,7 +47,6 @@
         console.log(`** SDK get request failed after ${getDuration} seconds`);
 
         console.error('** Error fetching customer details:', error);
-        setStatus('error');
       });
     };
     window.addEventListener('DOMContentLoaded', fetchCustomerDetails);
